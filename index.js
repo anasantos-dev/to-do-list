@@ -1,10 +1,20 @@
 let id = 0
 
 const tarefa = (id, novaTarefa) => `<div>
+<input type="checkbox" onchange="marcarTarefa(${id})"/>
 <p id='${id}'>${novaTarefa}</p>
-<Input type="checkbox" onchange="marcarTarefa(${id})"/>
-<button onclick="removerTarefa(${id})">Remover</button>
+<button onclick="removerTarefa(${id})">Remover Tarefa</button>
 </div>`
+
+function exibirLista() {
+    const tarefas = JSON.parse(localStorage.getItem('lista-tarefas'))
+    if(tarefas){
+        tarefas.forEach(tarefaListada => {
+            id++
+            document.querySelector('#lista-tarefas').innerHTML += tarefa(id, tarefaListada)
+        })
+    }
+}
 
 const marcarTarefa = (id) => {
     const strike = document.getElementById(`strike${id}`)
@@ -16,16 +26,7 @@ const marcarTarefa = (id) => {
     }
 }
 
-function exibirLista() {
-    console.log('called')
-    const tarefas = JSON.parse(localStorage.getItem('lista-tarefas'))
-    if(tarefas){
-        tarefas.forEach(tarefaListada => {
-            id++
-            document.querySelector('#lista-tarefas').innerHTML += tarefa(id, tarefaListada)
-        })
-    }
-}
+
 const validarTarefa = (novaTarefa) => {
     let tarefaExistente = false
     const listaTarefas = JSON.parse(localStorage.getItem('lista-tarefas'))
@@ -38,6 +39,8 @@ const validarTarefa = (novaTarefa) => {
     })
 
     return tarefaExistente
+    }
+/*
     if(listaTarefas){
         listaTarefas.map(tarefa => {
             if(tarefa === novaTarefa){
@@ -48,16 +51,18 @@ const validarTarefa = (novaTarefa) => {
 
         return tarefaExistente
     }
-}
+*/
 
 function adicionarTarefa(){
     id++
     const novaTarefa = document.getElementById('nome-tarefa').value 
+    document.querySelector('#lista-tarefas').innerHTML += tarefa(id, novaTarefa)
     const listaTarefas = localStorage.getItem('lista-tarefas')
-    if(validarTarefa(novaTarefa)){
+    validarTarefa(JSON.parse(listaTarefas))
+    /*if(validarTarefa(novaTarefa)){
         return
     }
-    document.querySelector('#lista-tarefas').innerHTML += tarefa(id, novaTarefa)
+   */
     if(listaTarefas){
         const novaLista = JSON.parse(listaTarefas)
         novaLista.push(novaTarefa)
